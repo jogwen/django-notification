@@ -408,11 +408,11 @@ class ObservedItem(models.Model):
         verbose_name = _("observed item")
         verbose_name_plural = _("observed items")
     
-    def send_notice(self, extra_context=None):
+    def send_notice(self, extra_context=None, headers=None):
         if extra_context is None:
             extra_context = {}
         extra_context.update({"observed": self.observed_object})
-        send([self.user], self.notice_type.label, extra_context)
+        send([self.user], self.notice_type.label, extra_context, headers)
 
 def observe(observed, observer, notice_type_label, signal="post_save"):
     """
@@ -437,7 +437,7 @@ def stop_observing(observed, observer, signal="post_save"):
     observed_item.delete()
 
 
-def send_observation_notices_for(observed, signal="post_save", extra_context=None):
+def send_observation_notices_for(observed, signal="post_save", extra_context=None, headers=None):
     """
     Send a notice for each registered user about an observed object.
     """
@@ -445,7 +445,7 @@ def send_observation_notices_for(observed, signal="post_save", extra_context=Non
         extra_context = {}
     observed_items = ObservedItem.objects.all_for(observed, signal)
     for observed_item in observed_items:
-        observed_item.send_notice(extra_context)
+        observed_item.send_notice(extra_context, headers)
     return observed_items
 
 
