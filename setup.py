@@ -1,11 +1,13 @@
+import os
 from setuptools import setup, find_packages
 
+thisdir = os.path.abspath(os.path.dirname(__file__))
 
 setup(
     name="django-notification",
     version=__import__("notification").__version__,
     description="User notification management for the Django web framework",
-    long_description=open("docs/usage.txt").read(),
+    long_description=open(os.path.join(thisdir, "docs/usage.txt")).read(),
     author="James Tauber",
     author_email="jtauber@jtauber.com",
     url="https://github.com/jtauber/django-notification",
